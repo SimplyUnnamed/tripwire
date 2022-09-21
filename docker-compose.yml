@@ -8,7 +8,7 @@ services:
     ports:
       - 8081:80
     networks:
-      # - web #- Used with Traefik
+      - web #- Used with Traefik
       - tripwire
     labels:
       - "traefik.frontend.rule=Host:example.com" # Used with Traefik to set your host
@@ -39,6 +39,8 @@ services:
     volumes:
       - mysql-data:/var/lib/mysql
       - ./.docker/mysql/tripwire.sql:/tmp/tripwire.sql
+    ports:
+      - "3306:3306"
     environment:
       - MYSQL_ROOT_PASSWORD=changeme
       - TRIPWIRE_DATABASE=tripwire
@@ -59,6 +61,4 @@ volumes:
 
 networks:
   tripwire:
-    external: true # Should not be exposed to the world
-  # web:
-  #   external: true # Used with Traefik to expose services to the web with SSL.
+  web:
