@@ -15,12 +15,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: install gulp
-        run: npm i -g gulp-cli
       - name: install npm dependancies
         run: npm install
       - name: install composer dependanceis
         run: composer install
+      - name: Compile js files
+        run: gulp js
       - name: Docker Meta
         id: meta
         uses: docker/metadata-action@v4
