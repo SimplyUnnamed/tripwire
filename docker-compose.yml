@@ -18,6 +18,8 @@ services:
     volumes:
       - "./:/opt/app"
     command: nginx
+    env_file:
+      - .env
 
   php-fpm:
     build:
@@ -28,6 +30,8 @@ services:
     volumes:
       - "./:/opt/app"
     command: php-fpm
+    env_file:
+      - .env
 
   mysql:
     # image: percona

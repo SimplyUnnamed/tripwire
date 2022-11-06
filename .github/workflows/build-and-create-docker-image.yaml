@@ -21,6 +21,8 @@ jobs:
         run: composer install
       - name: Compile js files
         run: gulp js
+      - name: Compile Css files
+        run: gulp css
       - name: Docker Meta
         id: meta
         uses: docker/metadata-action@v4

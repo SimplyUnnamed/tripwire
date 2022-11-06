@@ -2,3 +2,5 @@
 node_modules
 tweetie/config.php
 vendor
+.env
+*.log
