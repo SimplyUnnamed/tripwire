@@ -273,3 +273,6 @@ th.rightAlign {
 	text-align: right;
 	padding-right: 2px;
 }
+.mapstyle .controls {
+	position: relative !important;
+}

@@ -25,8 +25,10 @@ function openSignatureDialog(e) {
 		default: delete sigDialogVM.sigId;
 	}
 	
-	sigDialogVM.viewingSystemID = ( sigDialogVM.sigID ) ? tripwire.client.signatures[sigDialogVM.sigId].systemID : viewingSystemID;
+	sigDialogVM.viewingSystemID = ( sigDialogVM.sigId ) ? tripwire.client.signatures[sigDialogVM.sigId].systemID : viewingSystemID;
 	sigDialogVM.viewingSystem = tripwire.systems[sigDialogVM.viewingSystemID];
+
+
 	
 	if (!$("#dialog-signature").hasClass("ui-dialog-content")) {
 		$("#dialog-signature").dialog({
@@ -150,8 +152,54 @@ function openSignatureDialog(e) {
 
 					// Validate full signature ID doesn't already exist in current system
 					if (form.signatureID_Alpha.length === 3 && form.signatureID_Numeric.length === 3 && Object.find(tripwire.client.signatures, "signatureID", form.signatureID_Alpha + form.signatureID_Numeric, true) != false && Object.find(tripwire.client.signatures, "signatureID", form.signatureID_Alpha + form.signatureID_Numeric, true).id != $("#dialog-signature").data("signatureid")) {
-						var existingSignature = Object.find(tripwire.client.signatures, "signatureID", form.signatureID_Alpha + form.signatureID_Numeric);
-						ValidationTooltips.open({target: $("#dialog-signature .signatureID:first")}).setContent("Signature ID already exists! <input type='button' autofocus='true' id='overwrite' value='Overwrite' style='margin-bottom: -4px; margin-top: -4px; font-size: 0.8em;' data-id='"+ existingSignature.id +"' />");
+						
+						let effect = {
+							signatures: {
+								remove: []
+							},
+							systemID: viewingSystemID
+						},
+						signatures = []
+						currentSignature = Object.find(tripwire.client.signatures, "signatureID", form.signatureID_Alpha + form.signatureID_Numeric);
+						if ("wormhole" != currentSignature.type) signatures.push(currentSignature), effect.signatures.remove.push(currentSignature.id);
+						else {
+							let wormhole = $.map(tripwire.client.wormholes, function(wh) {
+								if (wh.initialID == currentSignature.id || wh.secondaryID == currentSignature.id) return wh
+							})[0];
+							signatures.push({
+								wormhole: wormhole,
+								signatures: [tripwire.client.signatures[wormhole.initialID], tripwire.client.signatures[wormhole.secondaryID]]
+							}), effect.signatures.remove.push(wormhole)
+						}
+						tripwire.refresh("refresh", effect, function(i) {
+							if(i.resultSet && 1 == i.resultSet[0].result){
+								ValidationTooltips.close()
+								$("#undo").removeClass(".disabled")
+								viewingSystemID in tripwire.signatures.undo ? 
+									tripwire.signatures.undo[viewingSystemID].push({
+										action: "remove",
+										signatures: signatures
+									}) : 
+									tripwire.signatures.undo[viewingSystemID] = [{
+										action: "remove",
+										signatures: signatures
+									}];
+								sessionStorage.setItem("tripwire_undo", JSON.stringify(tripwire.client.signatures.undo))
+								$("#dialog-signature").parent().find(":button:contains('Save')") ?
+									$("#dialog-signature").parent().find(":button:contains('Save')").click() :
+									$("#dialog-signature").parent().find(":button:contains('Add')").click()
+							}
+							// i.resultSet && 1 == i.resultSet[0].result && (ValidationTooltips.close(), $("#undo").removeClass("disabled"), viewingSystemID in tripwire.signatures.undo ? tripwire.signatures.undo[viewingSystemID].push({
+							// 	action: "remove",
+							// 	signatures: signatures
+							// }) : tripwire.signatures.undo[viewingSystemID] = [{
+							// 	action: "remove",
+							// 	signatures: e
+							// }],
+							// sessionStorage.setItem("tripwire_undo", JSON.stringify(tripwire.signatures.undo)), $("#dialog-signature").parent().find(":button:contains('Save')") ? $("#dialog-signature").parent().find(":button:contains('Save')").click() : $("#dialog-signature").parent().find(":button:contains('Add')").click())
+						})
+						//var existingSignature = Object.find(tripwire.client.signatures, "signatureID", form.signatureID_Alpha + form.signatureID_Numeric);
+						//ValidationTooltips.open({target: $("#dialog-signature .signatureID:first")}).setContent("Signature ID already exists! <input type='button' autofocus='true' id='overwrite' value='Overwrite' style='margin-bottom: -4px; margin-top: -4px; font-size: 0.8em;' data-id='"+ existingSignature.id +"' />");
 						$("#overwrite").focus();
 						valid = false;
 						return false;

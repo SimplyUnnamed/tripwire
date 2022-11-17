@@ -320,6 +320,7 @@ var SystemActivityToolTips = new jBox("Tooltip", {
 	reposition: true,
 	repositionOnOpen: true,
 	createOnInit: true,
+	offset: {y: +9, x: +3},
 	onOpen: function() {
 		var targetPos = positionRelativeTo(this.target[0], document.getElementById('chainParent'));
 		var nodePos = this.source.closest("[data-nodeid]").position();
@@ -340,6 +341,7 @@ var WormholeRouteToolTips = new jBox("Tooltip", {
 	reposition: true,
 	repositionOnOpen: true,
 	createOnInit: true,
+	offset: {y: +9, x: +3},
 	onOpen: function() {
 		var targetPos = positionRelativeTo(this.target[0], document.getElementById('chainParent'));
 		var nodeHeight = this.source.closest("[data-nodeid]").height();
@@ -362,6 +364,7 @@ var WormholeTypeToolTips = new jBox("Tooltip", {
 	reposition: true,
 	repositionOnOpen: true,
 	createOnInit: true,
+	offset: {y: +9, x: +3},
 	onOpen: function() {
 		var targetPos = positionRelativeTo(this.target[0], document.getElementById('chainParent'));
 		var tooltipWidth = this.container.parent().width();
@@ -383,6 +386,7 @@ var OccupiedToolTips = new jBox("Tooltip", {
 	repositionOnOpen: true,
 	repositionOnContent: true,
 	createOnInit: true,
+	offset: {y: +9, x: +3},
 	onOpen: function() {
 		var tooltip = this;
 		const nodeElemJ = this.source.closest("[data-nodeid]");
