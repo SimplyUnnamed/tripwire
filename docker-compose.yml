@@ -1,9 +1,7 @@
 version: "3"
 services:
   nginx:
-    build:
-      context: .
-      dockerfile: .docker/nginx/Dockerfile
+    build: .docker/nginx
     container_name: nginx
     ports:
       - 8081:80
@@ -21,10 +19,10 @@ services:
     env_file:
       - .env
 
+
   php-fpm:
-    build:
-      context: .
-      dockerfile: .docker/php-fpm/Dockerfile
+    build: .docker/php-fpm
+    container_name: php-fpm
     networks:
       - tripwire
     volumes:

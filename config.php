@@ -22,6 +22,13 @@ define('EVE_SSO_CLIENT', getenv('EVE_SSO_CLIENT'));
 define('EVE_SSO_SECRET', getenv('EVE_SSO_SECRET'));
 define('EVE_SSO_REDIRECT', getenv('EVE_SSO_CALLBACK'));
 
+// As of 2022-07-12, searching via the ESI API uses an endpoint that requires an
+// authentication token. In order to use the new search functionality, you will
+// need to add the `esi-search.search_structures.v1` scope to your application
+// in the `developers.eveonline.com` portal. Once you have done that, this
+// value can be changed from 'false' to 'true'.
+define('ENABLE_SEARCH_SCOPE', false);
+
 // Discord integration
 /*define('DISCORD_WEB_HOOK', array(
 	'maskID' => 'https://discord.com/api/webhooks/[discord web hook url]'
