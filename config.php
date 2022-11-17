@@ -27,7 +27,7 @@ define('EVE_SSO_REDIRECT', getenv('EVE_SSO_CALLBACK'));
 // need to add the `esi-search.search_structures.v1` scope to your application
 // in the `developers.eveonline.com` portal. Once you have done that, this
 // value can be changed from 'false' to 'true'.
-define('ENABLE_SEARCH_SCOPE', false);
+define('ENABLE_SEARCH_SCOPE', true);
 
 // Discord integration
 /*define('DISCORD_WEB_HOOK', array(

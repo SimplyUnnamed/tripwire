@@ -1,12 +1,12 @@
 version: "3"
 services:
-  nginx:
-    build: .docker/nginx
-    container_name: nginx
-    ports:
+  web:
+    build: .docker/dev
+    container_name: tripwire_web
+    ports: 
       - 8081:80
     networks:
-      - web #- Used with Traefik
+      - web
       - tripwire
     labels:
       - "traefik.frontend.rule=Host:example.com" # Used with Traefik to set your host
@@ -14,22 +14,40 @@ services:
       - "traefik.port=80"
       - "traefik.enable=true" # Traefik is not enabled on all services by default
     volumes:
-      - "./:/opt/app"
-    command: nginx
+      - "./:/var/www/html/tripwire"
     env_file:
       - .env
 
+  # nginx:
+  #   build: .docker/nginx
+  #   container_name: nginx
+  #   ports:
+  #     - 8081:80
+  #   networks:
+  #     - web #- Used with Traefik
+  #     - tripwire
+  #   labels:
+  #     - "traefik.frontend.rule=Host:example.com" # Used with Traefik to set your host
+  #     - "traefik.docker.network=web"
+  #     - "traefik.port=80"
+  #     - "traefik.enable=true" # Traefik is not enabled on all services by default
+  #   volumes:
+  #     - "./:/opt/app"
+  #   command: nginx
+  #   env_file:
+  #     - .env
 
-  php-fpm:
-    build: .docker/php-fpm
-    container_name: php-fpm
-    networks:
-      - tripwire
-    volumes:
-      - "./:/opt/app"
-    command: php-fpm
-    env_file:
-      - .env
+
+  # php-fpm:
+  #   build: .docker/php-fpm
+  #   container_name: php-fpm
+  #   networks:
+  #     - tripwire
+  #   volumes:
+  #     - "./:/opt/app"
+  #   command: php-fpm
+  #   env_file:
+  #     - .env
 
   mysql:
     # image: percona
