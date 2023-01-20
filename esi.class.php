@@ -25,7 +25,12 @@ class esi {
 
 		if ($params) {
 			curl_setopt($curl, CURLOPT_POST, true);
-			curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($params));
+			if(is_array($params)){
+				curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($params));
+			}else{
+				curl_setopt($curl, CURLOPT_POSTFIELDS, $params);
+			}
+			
 		}
 
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -181,7 +186,9 @@ class esi {
 		}
 
 		$result = $this->getAPI(self::$esiUrl . "/v2/characters/affiliation/", array(), json_encode($characterIDs));
+
 		$data = json_decode($result);
+
 		$parsed = array();
 		foreach($data as $affil){
 			$parsed[$affil->character_id] = $affil;
