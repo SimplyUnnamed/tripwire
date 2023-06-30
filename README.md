@@ -24,7 +24,7 @@ Requirements:
 Setup:
 
 - Create a `tripwire` database using the export located in `.docker/mysql/tripwire.sql`
-- Create an EVE dump database, define it's name later in `config.php`. Download from: https://www.fuzzwork.co.uk/dump/ To download the latest use the following link: https://www.fuzzwork.co.uk/dump/mysql-latest.tar.bz2
+- For development: create an EVE dump database, define it's name later in `config.php`. Download from: https://www.fuzzwork.co.uk/dump/ To download the latest use the following link: https://www.fuzzwork.co.uk/dump/mysql-latest.tar.bz2. You do not need a copy of the SDE to run Tripwire (since 1.21).
 - Clone the Tripwire repo to where you are going to serve to the public OR manually download repo and copy files yourself
 - Copy `db.inc.example.php` to `db.inc.php` - modify file per your setup
 - Copy `config.example.php` to `config.php` - modify file per your setup
@@ -43,6 +43,7 @@ Setup:
 - Modify your web server to serve Tripwire from the `tripwire/public` folder so the files like `config.php` and `db.inc.php` are not accessible via URL
 - Setup a CRON or schedule for `system_activity.cron.php` to run at the top of every hour. CRON: `0 * * * * php /dir/to/system_activity.cron.php`
 - Setup a CRON or schedule for `account_update.cron.php` to run every 3 minutes or however often you want to check for corporation changes. CRON: `*/3 * * * * php /dir/to/account_update.cron.php`
+- If you are using SELinux: Tripwire needs access to the 'cache' directory inside the deployment directory, usually /var/www/tripwire. You need to make this a write-access directory via SELinux labelling: `semanage fcontext -a -t httpd_sys_rw_content_t "/var/www/tripwire/cache(/.*)?"` - then relabel the directory `restorecon -R -v /var/www/tripwire`
 
 ### Setup guide for Docker
 
@@ -86,11 +87,13 @@ _TODO: Use either a docker cron or use docker exec commands in crontab_
 
 ### Contribution guidelines
 
-- Base off of production
+- Base off of production or development
+- Create PRs into development
 - Look over issues, branches or get with me to ensure it isn't already being worked on
 
 ### Who do I talk to?
 
-- Josh Glassmaker AKA Daimian Mercer (Project lead / Creator)
+- Astriania / Kariyo Astrien (Main contributor/maintainer)
 - Tripwire Public in-game channel
 - Discord: https://discord.gg/xjFkJAx
+- Josh Glassmaker AKA Daimian Mercer (Creator)
