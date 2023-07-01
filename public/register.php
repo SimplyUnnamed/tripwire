@@ -39,7 +39,7 @@ function random_str(
 if ($mode == 'user') {
 	require('../esi.class.php');
 	$esi = new esi();
-
+	
 	// Send user to the CCP SSO login page
 	$esi->login(null, 'evessoregisteruser');
 } else if ($mode == 'admin') {

@@ -1,5 +1,5 @@
 <?php
-
+error_reporting(E_ALL);
 // SSO redirecting
 $state = isset($_REQUEST['state'])?$_REQUEST['state']:null;
 if ($state == 'evessologin' || $state == 'evessoesi') {
