@@ -558,12 +558,12 @@ var chain = new function() {
 			if(data.closestToViewing) {
 				const inChain = data.closestToViewing.pathLength <= 1;
 				const prefixText = inChain ? 'In chain: ' : (data.closestToViewing.pathLength - 1) + 'j from ' ;
-				const pathHomeText = data.closestToViewing.pathHome.slice().reverse()
+				const pathHomeText = data.closestToViewing.pathHome.slice()
 					.map(function(n) { return '<a href=".?system=' + tripwire.systems[n.systemID].name + '">' + (n.name || n.signatureID.substr(0,3).toUpperCase() || '???') + '</a>'; })
 					.join(' &gt; ');
 				const pathToChainText = inChain ? '' : '<br/>' + systemRendering.renderPath(guidance.findShortestPath(tripwire.map.shortest, data.closestToViewing.systemID - 30000000, viewingSystemID - 30000000));
 				$("#infoExtra").html(prefixText + pathHomeText + pathToChainText);
-				$("#infoExtra").append(this.renderClipboardIcon(data.closestToViewing.pathHome.slice().reverse()));
+				$("#infoExtra").append(this.renderClipboardIcon(data.closestToViewing.pathHome.slice()));
 				$("#infoExtra").css("display", "flex")
 						.css("align-items", "center")
 						.css("gap","5px")
@@ -645,7 +645,6 @@ var chain = new function() {
 		$(svg)
 			.attr("viewBox", "0 0 285.102 285.102")
 			.attr("version", "1.1")
-			// .attr("xmlns",  "http://www.w3.org/2000/svg")
 			.css("height", "15px")
 			.css("width", "15px")
 			.css("display", "inline-block")
