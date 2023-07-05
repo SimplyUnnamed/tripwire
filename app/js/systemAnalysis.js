@@ -47,15 +47,23 @@ var systemAnalysis = new function() {
 			
 		return r;
 	};
+
+	
 	
 	/** Create a dummy system object for fake IDs like 'Null-Sec', 'Class-5' etc */
 	function getDummySystem(systemID) {
 		const leadsToPointer = typeof(systemID) === "string" && systemID.indexOf("|") >= 0 ? appData.genericSystemTypes[systemID.substring(0, systemID.indexOf("|"))]
 		: appData.genericSystemTypes.indexOf(systemID) >= 0 ? systemID
 		: appData.genericSystemTypes[systemID];
-		const nodeClass = 
-			leadsToPointer && leadsToPointer.substring(0, 6) == 'Class-' ? 1 * leadsToPointer.substring(6) :
-			undefined;
+		let nodeClass = undefined;
+		if(leadsToPointer && leadsToPointer.substring(0,6) == "Class-"){
+			nodeClass = 1*leadsToPointer.substring(6);
+		}else if(leadsToPointer && leadsToPointer.substring(0,1) == "C"){
+			nodeClass = 1*leadsToPointer.substring(1);
+		}
+		// const nodeClass = 
+		// 	leadsToPointer && leadsToPointer.substring(0, 6) == 'Class-' ? 1 * leadsToPointer.substring(6) : (leadsToPointer.substring(0,1) == "C" ? 1*leadsToPointer.substring(2) :
+		// 	undefined);
 		const nodeSecurity = 
 			leadsToPointer == "High-Sec" ? 0.8 :
 			leadsToPointer == "Low-Sec" ? 0.4 :
