@@ -560,7 +560,7 @@ var chain = new function() {
 				const prefixText = inChain ? 'In chain: ' : (data.closestToViewing.pathLength - 1) + 'j from ' ;
 				const pathHomeText = data.closestToViewing.pathHome.slice()
 					.map(function(n) { 
-						return '<a href=".?system=' + tripwire.systems[n.systemID].name + '">' + (n.name || (n.signatureID != null && n.signatureID.substr(0,3)) || "???") + '</a>'; 
+						return '<a href=".?system=' + tripwire.systems[n.systemID].name + '">' + (n.name || (n.signatureID != null && n.signatureID.substr(0,3).toUpperCase()) || '???') + '</a>'; 
 					})
 					.join(' &gt; ');
 				const pathToChainText = inChain ? '' : '<br/>' + systemRendering.renderPath(guidance.findShortestPath(tripwire.map.shortest, data.closestToViewing.systemID - 30000000, viewingSystemID - 30000000));
