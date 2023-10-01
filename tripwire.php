@@ -156,7 +156,11 @@ $system = $_REQUEST['system'];
 						<h4 id="infoRegion" class="pointer">&nbsp;</h4>
 						<h4 id="infoFaction" class="pointer">&nbsp;</h4>
 					</div>
-					<div id="infoExtra" style="float: right; width: 50%; text-align: right;">
+					<div id="infoExtra" style="float: right; width: 50%; text-align: right; display: flex; flex-direction: column; align-items: end; gap: 5px;">
+						<div id="inChain" style="display: flex; align-items: center; justify-content: end; gap: 5px"></div>
+						<div id="journyPlanner">
+						
+						</div>
 					</div>
 					<br clear="all"/>
 					<div id="activityGraph"></div>
