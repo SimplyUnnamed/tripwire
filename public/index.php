@@ -12,6 +12,7 @@ if ($state == 'evessologin' || $state == 'evessoesi') {
 
 session_start();
 
+
 if (!isset($_SESSION['username']) && isset($_COOKIE['tripwire']))
 	include('login.php');
 

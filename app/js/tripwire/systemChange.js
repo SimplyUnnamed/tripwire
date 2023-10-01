@@ -38,6 +38,14 @@ tripwire.systemChange = function(systemID, mode) {
 
     $("#infoSystem").text(system.name);
 
+    var formJourneyLink = function(type){
+        var origin = window.location.origin;
+        return origin + "/?journey&"+type+"="+system.name;
+    }
+
+    $("#journeyFrom").attr("href", formJourneyLink("from"))
+    $("#journeyTo").attr("href", formJourneyLink("to"))
+
     // Current system favorite
     $.inArray(parseInt(viewingSystemID), options.favorites) != -1 ? $("#system-favorite").attr("data-icon", "star").addClass("active") : $("#system-favorite").attr("data-icon", "star-empty").removeClass("active");
 	

@@ -650,8 +650,10 @@ var chain = new function() {
 			.css("display", "inline-block")
 			.css("cursor", "copy")
 			.append(g);
-
+		return svg;
 	}
+
+
 
 	this.renderClipboardIcon = function(path){
 		

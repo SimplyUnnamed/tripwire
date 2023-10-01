@@ -10,9 +10,11 @@
 	<script src="js/wasm_exec.js"></script>
 	<script>
 	const go = new Go();
-	WebAssembly.instantiateStreaming(fetch("wsam/journey.wasm"), go.importObject).then((result) => {
+	WebAssembly.instantiateStreaming(fetch("wasm/journey.wasm"), go.importObject).then((result) => {
 		go.run(result.instance);
 	});
+	
+	var autocompleteinstances = null;
 	
 	var startup = async function() {
 		var elems = document.querySelectorAll('select');
@@ -27,14 +29,22 @@
 			return;
 		}
 		
-		var elems = document.querySelectorAll('.systems');
-		var instances = M.Autocomplete.init(elems, {
+		M.Autocomplete.init(document.querySelectorAll('.systems'), {
 			minLength: 0,
 			data: systems
 		});
+		
+		const urlParams = new URLSearchParams(window.location.search);
+		systems.forEach(function(system) {
+			if (system['text'] == urlParams.get('from')) {
+				M.Autocomplete.getInstance($('#fromsystem')).setValues([system]);
+			}
+			if (system['text'] == urlParams.get('to')) {
+				M.Autocomplete.getInstance($('#tosystem')).setValues([system]);
+			}
+		});
 
-		var elems = document.querySelectorAll('#avoidsystems');
-		var instances = M.Chips.init(elems, {
+		M.Chips.init(document.querySelectorAll('#avoidsystems'), {
 			autocompleteOptions: { data: systems },
 			autocompleteOnly: true
 		});
