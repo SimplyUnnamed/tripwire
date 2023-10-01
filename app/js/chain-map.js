@@ -555,23 +555,7 @@ var chain = new function() {
 			SystemActivityToolTips.attach($("#chainMap .nodeClass span[data-tooltip]"));
 			
 			// Update dependent controls: Path to chain/home
-			if(data.closestToViewing) {
-				const inChain = data.closestToViewing.pathLength <= 1;
-				const prefixText = inChain ? 'In chain: ' : (data.closestToViewing.pathLength - 1) + 'j from ' ;
-				const pathHomeText = data.closestToViewing.pathHome.slice()
-					.map(function(n) { 
-						return '<a href=".?system=' + tripwire.systems[n.systemID].name + '">' + (n.name || (n.signatureID != null && n.signatureID.substr(0,3).toUpperCase()) || '???') + '</a>'; 
-					})
-					.join(' &gt; ');
-				const pathToChainText = inChain ? '' : '<br/>' + systemRendering.renderPath(guidance.findShortestPath(tripwire.map.shortest, data.closestToViewing.systemID - 30000000, viewingSystemID - 30000000));
-				$("#infoExtra").html(prefixText + pathHomeText + pathToChainText);
-				$("#infoExtra").append(this.renderClipboardIcon(data.closestToViewing.pathHome.slice()));
-				$("#infoExtra").css("display", "flex")
-						.css("align-items", "center")
-						.css("gap","5px")
-						.css("justify-content", "flex-end");
-				Tooltips.attach($("#infoExtra [data-tooltip]"));
-			} else { $("#infoExtra").text(''); }
+			this.renderInChain(data);
 			
 			this.drawing = false;
 		}
@@ -623,6 +607,53 @@ var chain = new function() {
 			this.data.flares = this.flares(data.flares);
 		}
 	}
+
+	this.renderInChain = function(data){
+		if(data.closestToViewing) {
+			const inChain = data.closestToViewing.pathLength <= 1;
+			const prefixText = inChain ? 'In chain: ' : (data.closestToViewing.pathLength - 1) + 'j from ' ;
+			const pathHomeText = data.closestToViewing.pathHome.slice()
+				.map(function(n) { 
+					return '<a href=".?system=' + tripwire.systems[n.systemID].name + '">' + (n.name || (n.signatureID != null && n.signatureID.substr(0,3).toUpperCase()) || '???') + '</a>'; 
+				})
+				.join(' &gt; ');
+			const pathToChainText = inChain ? '' : '<br/>' + systemRendering.renderPath(guidance.findShortestPath(tripwire.map.shortest, data.closestToViewing.systemID - 30000000, viewingSystemID - 30000000));
+			$("#inChain").html(prefixText + pathHomeText + pathToChainText);
+			$("#inChain").append(this.renderClipboardIcon(data.closestToViewing.pathHome.slice()));
+			$("#inChain").css("display", "flex")
+					.css("align-items", "end")
+					.css("gap","5px");
+			Tooltips.attach($("#inChain [data-tooltip]"));
+		} else { $("#inChain").text(''); }
+	},
+
+	this.renderRouteIcon = function()
+	{
+		const paths = [
+			"M416 320h-96c-17.6 0-32-14.4-32-32s14.4-32 32-32h96s96-107 96-160-43-96-96-96-96 43-96 96c0 25.5 22.2 63.4 45.3 96H320c-52.9 0-96 43.1-96 96s43.1 96 96 96h96c17.6 0 32 14.4 32 32s-14.4 32-32 32H185.5c-16 24.8-33.8 47.7-47.3 64H416c52.9 0 96-43.1 96-96s-43.1-96-96-96zm0-256c17.7 0 32 14.3 32 32s-14.3 32-32 32-32-14.3-32-32 14.3-32 32-32zM96 256c-53 0-96 43-96 96s96 160 96 160 96-107 96-160-43-96-96-96zm0 128c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32z",			
+		]
+		const ns = "http://www.w3.org/2000/svg";
+		const svg = document.createElementNS(ns, "svg");
+		const g = document.createElementNS(ns, "g");
+		$(g).append(
+			paths.map(function(p) {
+				const path = document.createElementNS(ns, "path")
+				$(path).attr("d", p).css("fill", "#efefef")
+				return path;
+			})
+		)
+		$(svg)
+			.attr("viewBox", "0 0 285.102 285.102")
+			.attr("version", "1.1")
+			.css("height", "15px")
+			.css("width", "15px")
+			.css("display", "inline-block")
+			.css("cursor", "copy")
+			.append(g);
+		return svg;
+	}
+
+
 
 	this.renderClipboardIcon = function(path){
 		
