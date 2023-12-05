@@ -1,4 +1,5 @@
 <?php
+
 //***********************************************************
 //	File: 		login.php
 //	Author: 	Daimian
@@ -10,6 +11,14 @@
 //	ToDo:
 //***********************************************************
 $startTime = microtime(true);
+
+function dd($message)
+{
+	echo "<pre>";
+	echo $message;
+	echo "</pre>";
+	exit;
+}
 
 if (!session_id()) session_start();
 

@@ -1,6 +1,8 @@
 <?php
-error_reporting(E_ALL);
+
+error_reporting(-1);
 // SSO redirecting
+
 $state = isset($_REQUEST['state'])?$_REQUEST['state']:null;
 if ($state == 'evessologin' || $state == 'evessoesi') {
 	require('login.php');

@@ -36,6 +36,7 @@ RUN chmod +x /entrypoint.sh
 WORKDIR /var/www/html
 COPY --chown=nobody --from=build /app tripwire
 RUN chmod 755 tripwire/public
+RUN chmod 755 tripwire/cache
 
 WORKDIR /var/www/html
 EXPOSE 80

@@ -35,7 +35,7 @@ var guidance = (function (undefined) {
 		const endsInStart = end.filter(function(x) { return start.indexOf(x) >= 0; });
 		if(endsInStart.length) { return [endsInStart[0]]; }
 		
-		if(!(start.length && end.length)) { return null; }	// both ends of path must be in network somewhere
+		// if(!(start.length && end.length)) { return null; }	// both ends of path must be in network somewhere
 
 		var costs = {},
 		    open = {'0': []},
