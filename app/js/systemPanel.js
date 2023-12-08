@@ -85,8 +85,11 @@ const systemPanel = new function() {
 
 	function buildPath(n){
 		var tagName = n.name;
-		if(tagName == null) tagName = n.signatureID.toUpperCase().substring(0,3);
-		if(tagName == null) tagName = "???";
+		if(tagName == null) tagName = n.signatureID
+		
+		tagName = tagName == null ? "???" : tagName.toUpperCase().substring(0,3);
+		
+		
 		return {
 			link: ".?system="+tripwire.systems[n.systemID].name,
 			text: tagName
