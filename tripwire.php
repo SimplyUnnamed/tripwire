@@ -8,8 +8,6 @@ $startTime = microtime(true);
 // header('Pragma: cache');
 // header('Content-Type: text/html; charset=UTF-8');
 
-// setcookie('loadedFromBrowserCache','false');
-
 require_once('config.php');
 require_once('settings.php');
 require('lib.inc.php');
@@ -173,7 +171,7 @@ $system = $_REQUEST['system'];
 					<div id="activityGraphControls" style="text-align: center;"><a href="javascript: activity.time(168);">Week</a> - <a href="javascript: activity.time(48);">48Hour</a> - <a href="javascript: activity.time(24);">24Hour</a></div>
 					<div id="infoLinks" style="text-align: center;">
 						<a class="infoLink" data-href="http://anoik.is/systems/$systemName" href="" target="_blank">Anoik.is</a> - 
-						<a class="infoLink" data-href="http://evemaps.dotlan.net/search?q=$systemName" href="" target="_blank">dotlan</a> - 
+						<a class="infoLink" data-href="https://evemaps.dotlan.net/search?q=$systemName" href="" target="_blank">dotlan</a> - 
 						<a class="infoLink" data-href='https://zkillboard.com/system/$systemID/' href="" target="_blank">zKillboard</a>
 					</div>
 					<div id="infoStatics" class="pointer"></div>
@@ -353,7 +351,7 @@ $system = $_REQUEST['system'];
 			<a href="https://www.patreon.com/bePatron?u=3551109" data-patreon-widget-type="become-patron-button">Become a Patron!</a><script async src="https://c6.patreon.com/becomePatronButton.bundle.js"></script>
 		</form>
 		<?php printf("<span id='pageTime'>Page generated in %.3f seconds.</span>", microtime(true) - $startTime); ?>
-		<p>All Eve Related Materials are Property Of <a href="http://www.ccpgames.com" target="_blank">CCP Games</a></p>
+		<p>All Eve Related Materials are Property Of <a href="https://www.ccpgames.com" target="_blank">CCP Games</a></p>
 		<p id="legal" class="pointer">EVE Online and the EVE logo are the registered trademarks of CCP hf. All rights are reserved worldwide. All other trademarks are the property of their respective owners. EVE Online, the EVE logo, EVE and all associated logos and designs are the intellectual property of CCP hf. All artwork, screenshots, characters, vehicles, storylines, world facts or other recognizable features of the intellectual property relating to these trademarks are likewise the intellectual property of CCP hf. CCP is in no way responsible for the content on or functioning of this website, nor can it be liable for any damage arising from the use of this website.</p>
 	</div> -->
 	</div>
@@ -415,17 +413,7 @@ $system = $_REQUEST['system'];
 						<span data-autocomplete="sigSystems">
 							<input name="leadsTo" type="text" maxlength="20" size="20" class="leadsTo" autocomplete="off" />
 							<select>
-								<option value="Null-Sec">Null-Sec</option>
-								<option value="Low-Sec">Low-Sec</option>
-								<option value="High-Sec">High-Sec</option>
-								<option value="Class-#">Class-#</option>
-								<!-- <option value="Class-1">Class-1</option>
-								<option value="Class-2">Class-2</option>
-								<option value="Class-2">Class-2</option>
-								<option value="Class-3">Class-3</option>
-								<option value="Class-4">Class-4</option>
-								<option value="Class-5">Class-5</option>
-								<option value="Class-6">Class-6</option> -->
+								<!-- Values filled in by signature dialog JS -->
 							</select>
 						</span>
 					</div>
@@ -662,14 +650,6 @@ $system = $_REQUEST['system'];
 							</select>
 						</td>
 					</tr>
-					<!-- <tr>
-						<th>Chain Type format:</th>
-						<td><input type="text" id="typeFormat" size="4" maxlength="3" /></td>
-					</tr> -->
-					<!-- <tr>
-						<th>Chain Class format:</th>
-						<td><input type="text" id="classFormat" size="4" maxlength="3" /></td>
-					</tr> -->
 					<tr>
 						<th>Show Chain Map Gridlines:</th>
 						<td>
@@ -682,6 +662,13 @@ $system = $_REQUEST['system'];
 						<td>
 							<input type="radio" name="aura" id="aura-yes" value="true" /><label for="aura-yes"> Yes</label>
 							<input type="radio" name="aura" id="aura-no" value="false" /><label for="aura-no"> No</label>
+						</td>
+					</tr>
+					<tr>
+						<th>Allow Scroll Without Ctrl Key:</th>
+						<td>
+							<input type="radio" name="scrollWithoutCtrl" id="scrollWithoutCtrl-yes" value="true" /><label for="scrollWithoutCtrl-yes"> Yes</label>
+							<input type="radio" name="scrollWithoutCtrl" id="scrollWithoutCtrl-no" value="false" /><label for="scrollWithoutCtrl-no"> No</label>
 						</td>
 					</tr>
 					<tr>
