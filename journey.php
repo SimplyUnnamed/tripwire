@@ -1,3 +1,3 @@
 <?php
 
-include("journey.html");
+include("public/journey.htm");
