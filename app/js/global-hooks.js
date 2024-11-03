@@ -671,7 +671,6 @@ $("#signaturesWidget #sigTable thead").contextmenu({
 
 // Chain Map Context Menu
 $("#chainParent").contextmenu({
-	appendTo: "#chainParent",
 	delegate: ".nodeSystem a",
 	position: function(event, ui) {
         return {my: "left top-1", at: "right top", of: ui.target};
@@ -715,6 +714,10 @@ $("#chainParent").contextmenu({
 				var toggle = options.chain.tabs[options.chain.active] ? ($.inArray(id, options.chain.tabs[options.chain.active].collapsed) == -1 ? true : false) : true;
 				chain.renderer.collapse(id, toggle);
 				break;
+			case "copySystemName": 
+				const systemName = tripwire.systems[id].name;
+				navigator.clipboard.writeText(systemName); 
+				break;
 			case "makeTab":
 				const existingTabIndex = Object.index(options.chain.tabs, 'systemID', '' + id, false);
 				if(undefined !== existingTabIndex) {
@@ -733,6 +736,7 @@ $("#chainParent").contextmenu({
 	beforeOpen: function(e, ui) {
 		var wormholeID = $(ui.target[0]).closest("[data-nodeid]").data("sigid") || null;
 		var systemID = $(ui.target[0]).closest("[data-nodeid]").data("nodeid");
+		const systemName = tripwire.systems[systemID].name;
 
 		// Add check for k-space
 		if (tripwire.systems[systemID].class || !tripwire.esi.characters[options.tracking.active]) {
@@ -754,12 +758,15 @@ $("#chainParent").contextmenu({
 		
 		// Add check for tab validity
 		const existingTab = Object.find(options.chain.tabs, 'systemID', '' + systemID, false);
-		$('#makeTabMenuItem').text(existingTab ? 'View Tab' : 'Make Tab' );
+		$('#makeTabMenuItem').text((existingTab ? 'View Tab' : 'Make Tab') + ' for ' + systemName );
+		$('#copySystemNameMenuItem').text('Copy "' + systemName + '"');
 	},
 	create: function(e, ui) {
 		// Fix some bad CSS from jQuery Position
-		$(this).find(".ui-front").css("width", "10em");
-		$(this).find(".ui-front").css("position", "");
+		const menuElem = document.getElementById('chainMenu');
+		$(menuElem).css("width", "auto");
+		$(menuElem).find(".ui-front").css("width", "10em");
+		$(menuElem).find(".ui-front").css("position", "");
 
 		$.moogle.contextmenu.prototype.setFlare = function(systemID, flare, ui) {
 			var data = {"systemID": systemID, "flare": flare};

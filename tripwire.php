@@ -270,7 +270,7 @@ $system = $_REQUEST['system'];
 						<!-- <i class="tutorial" data-tooltip="Show tutorial for this section">?</i> -->
 					</div>
 				</div>
-				<div id="chainParent" class="content dragscroll">
+				<div id="menuContainer" style="position:absolute">
 					<ul id="chainMenu" class="hidden">
 						<!-- <li data-command="showInfo"><a>Show Info</a> -->
 						<li><a>Navigation</a>
@@ -290,9 +290,12 @@ $system = $_REQUEST['system'];
 							<li data-command="mass"><a>Mass</a></li>
 							<li data-command="collapse"><a>Collapse</a></li>
 							<li data-command="ping"><a>Ping ...</a></li>
+							<li data-command="copySystemName"><a id="copySystemNameMenuItem">[Copy system name]</a></li>
 							<li data-command="makeTab"><a id="makeTabMenuItem">[makeTab]</a></li>
 						</li>
-					</ul>
+					</ul>				
+				</div>
+				<div id="chainParent" class="content dragscroll">
 					<div style="position: relative; display: table; width: 100%;">
 						<table id="chainGrid">
 							<tr class="top"><td></td></tr>
