@@ -270,31 +270,6 @@ $system = $_REQUEST['system'];
 						<!-- <i class="tutorial" data-tooltip="Show tutorial for this section">?</i> -->
 					</div>
 				</div>
-				<div id="menuContainer" style="position:absolute">
-					<ul id="chainMenu" class="hidden">
-						<!-- <li data-command="showInfo"><a>Show Info</a> -->
-						<li><a>Navigation</a>
-							<ul style="width: 10em;">
-								<li data-command="setDest"><a>Set Destination</a></li>
-								<li data-command="addWay"><a>Add Waypoint</a></li>
-							</ul>
-						</li>
-						<li>
-							<li><a>Flares</a>
-								<ul style="width: 10em;">
-									<li data-command="red"><a>Battle (red)</a></li>
-									<li data-command="yellow"><a>Hold (yellow)</a></li>
-									<li data-command="green"><a>Fleet Op (green)</a></li>
-								</ul>
-							</li>
-							<li data-command="mass"><a>Mass</a></li>
-							<li data-command="collapse"><a>Collapse</a></li>
-							<li data-command="ping"><a>Ping ...</a></li>
-							<li data-command="copySystemName"><a id="copySystemNameMenuItem">[Copy system name]</a></li>
-							<li data-command="makeTab"><a id="makeTabMenuItem">[makeTab]</a></li>
-						</li>
-					</ul>				
-				</div>
 				<div id="chainParent" class="content dragscroll">
 					<div style="position: relative; display: table; width: 100%;">
 						<table id="chainGrid">
@@ -347,6 +322,31 @@ $system = $_REQUEST['system'];
 						</table>
 						<div id="chainMap"></div>
 					</div>
+				</div>
+				<div id="menuContainer" style="position:absolute">
+					<ul id="chainMenu" class="hidden">
+						<!-- <li data-command="showInfo"><a>Show Info</a> -->
+						<li><a>Navigation</a>
+							<ul style="width: 10em;">
+								<li data-command="setDest"><a>Set Destination</a></li>
+								<li data-command="addWay"><a>Add Waypoint</a></li>
+							</ul>
+						</li>
+						<li>
+							<li><a>Flares</a>
+								<ul style="width: 10em;">
+									<li data-command="red"><a>Battle (red)</a></li>
+									<li data-command="yellow"><a>Hold (yellow)</a></li>
+									<li data-command="green"><a>Fleet Op (green)</a></li>
+								</ul>
+							</li>
+							<li data-command="mass"><a>Mass</a></li>
+							<li data-command="collapse"><a>Collapse</a></li>
+							<li data-command="ping"><a>Ping ...</a></li>
+							<li data-command="copySystemName"><a id="copySystemNameMenuItem">[Copy system name]</a></li>
+							<li data-command="makeTab"><a id="makeTabMenuItem">[makeTab]</a></li>
+						</li>
+					</ul>				
 				</div>
 			</li>
 		</ul>
