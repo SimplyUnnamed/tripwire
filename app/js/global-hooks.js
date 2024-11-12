@@ -692,6 +692,12 @@ $("#chainParent").contextmenu({
 			case "addWay":
 				tripwire.esi.setDestination(id, options.tracking.active, false);
 				break;
+			case "setDestAll":
+			case "addWayAll":
+				for(const characterId in tripwire.esi.characters) {
+					tripwire.esi.setDestination(id, characterId, ui.cmd == "setDestAll");
+				}
+				break;
 			case "showMap":
 				// CCPEVE.showMap(id);
 				break;
@@ -742,10 +748,14 @@ $("#chainParent").contextmenu({
 		if (tripwire.systems[systemID].class || !tripwire.esi.characters[options.tracking.active]) {
 			$(this).contextmenu("enableEntry", "setDest", false);
 			$(this).contextmenu("enableEntry", "addWay", false);
+			$(this).contextmenu("enableEntry", "setDestAll", false);
+			$(this).contextmenu("enableEntry", "addWayAll", false);
 			$(this).contextmenu("enableEntry", "showMap", false);
 		} else {
 			$(this).contextmenu("enableEntry", "setDest", true);
 			$(this).contextmenu("enableEntry", "addWay", true);
+			$(this).contextmenu("enableEntry", "setDestAll", true);
+			$(this).contextmenu("enableEntry", "addWayAll", true);
 			$(this).contextmenu("enableEntry", "showMap", false);
 		}
 		
@@ -765,7 +775,7 @@ $("#chainParent").contextmenu({
 		// Fix some bad CSS from jQuery Position
 		const menuElem = document.getElementById('chainMenu');
 		$(menuElem).css("width", "auto");
-		$(menuElem).find(".ui-front").css("width", "10em");
+		$(menuElem).find(".ui-front").css("width", "auto");
 		$(menuElem).find(".ui-front").css("position", "");
 
 		$.moogle.contextmenu.prototype.setFlare = function(systemID, flare, ui) {

@@ -330,6 +330,9 @@ $system = $_REQUEST['system'];
 							<ul style="width: 10em;">
 								<li data-command="setDest"><a>Set Destination</a></li>
 								<li data-command="addWay"><a>Add Waypoint</a></li>
+								<li>-</li>
+								<li data-command="setDestAll"><a>Set Destination (All Tracked)</a></li>
+								<li data-command="addWayAll"><a>Add Waypoint (All Tracked)</a></li>		
 							</ul>
 						</li>
 						<li>
