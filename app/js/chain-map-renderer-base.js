@@ -114,6 +114,9 @@ const ChainMapRendererBase = function(owner) {
 		}
 
 		// Fourth pass: update div and canvas bounds, and draw rings/links
+		// Remember the scroll on the outer container so we can reset it if the map didn't change a lot
+		const chainParent = document.getElementById('chainParent');
+		const previousScroll = { x: chainParent.scrollLeft, y: chainParent.scrollTop };
 		const CANVAS_SCALE = 1;
 		for(var mi = 0; mi < maps.length; mi++) {
 			const map = maps[mi];
@@ -137,7 +140,7 @@ const ChainMapRendererBase = function(owner) {
 				}
 			}			
 			if(centringOptions.y) {
-				const parentHeight = document.getElementById('chainParent').offsetHeight;
+				const parentHeight = chainParent.offsetHeight;
 				if(finalPositions.h < parentHeight) {
 					finalPositions.cy += 0.5 * (parentHeight - finalPositions.h);
 					finalPositions.h = parentHeight;
@@ -208,6 +211,10 @@ const ChainMapRendererBase = function(owner) {
 			if(div) { div.parentNode.removeChild(div); }
 			else { break; }
 		}
+		
+		// Set scroll back to where it was
+		chainParent.scrollLeft = previousScroll.x;
+		chainParent.scrollTop = previousScroll.y;
 	}
 	
 	function drawConnections(ctx, nodes, drawFunction) {
