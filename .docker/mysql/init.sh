@@ -1,65 +1,74 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 
-# Create a single init.sql containing all the sql needed for setup of the two
-# databases tripwire requires. Let the mysql container entrypoint execute the
-# sql to keep things simple.
-set -e
-init_file="/docker-entrypoint-initdb.d/init.sql"
+echo "[SEED] Starting Tripwire + fuzzworks SDE seed..."
 
-# Initial tripwire database creation
+DB_HOST="${DB_HOST:-mysql}"
+DB_PORT="${DB_PORT:-3306}"
+DB_ROOT_USER="${DB_ROOT_USER:-root}"
+DB_ROOT_PASS="${DB_ROOT_PASS:-}"
+TRIPWIRE_DB="${TRIPWIRE_DB:-tripwire_database}"
+SDE_DB="${SDE_DB:-eve_dump}"
 
-{
-	echo "CREATE DATABASE IF NOT EXISTS $TRIPWIRE_DATABASE;"
-	echo "USE $TRIPWIRE_DATABASE;"
-	cat /tmp/tripwire.sql
-} >> $init_file
+echo "[SEED] DB_HOST=$DB_HOST; DB_PORT=$DB_PORT; TRIPWIRE_DB=$TRIPWIRE_DB; SDE_DB=$SDE_DB"
 
-# Checks last-modified date of fuzzworks eve dump
+###############################################################################
+# 1) Wait for MySQL to be reachable
+###############################################################################
+MAX_WAIT=30
+echo "[SEED] Waiting up to $MAX_WAIT seconds for MySQL ($DB_HOST:$DB_PORT) to accept connections..."
+for i in $(seq 1 "$MAX_WAIT"); do
+  if mysqladmin ping -h"$DB_HOST" -P"$DB_PORT" -u"$DB_ROOT_USER" -p"$DB_ROOT_PASS" --silent; then
+    echo "[SEED] MySQL is available!"
+    break
+  fi
+  echo -n "."
+  sleep 1
+done
 
-mkdir -p /tmp/"$SDE_DATABASE"/
+###############################################################################
+# 2) Import the Tripwire schema
+###############################################################################
+if [ -f ./tripwire.sql ]; then
+  echo "[SEED] Checking if we need to create Tripwire DB schema from tripwire.sql..."
+  echo "[SEED] Creating $TRIPWIRE_DB and loading ./tripwire.sql..."
 
-remote_evedump_TS=$(curl -s -v -X HEAD https://www.fuzzwork.co.uk/dump/mysql-latest.tar.bz2 2>&1 | grep '^< last-modified:' | sed -e 's/< last-modified: //g')
-remote_evedump_DO=$(date -d "$remote_evedump_TS")
-current_date=$(date)
+  # Create DB if not exists:
+  mysql -h"$DB_HOST" -P"$DB_PORT" -u"$DB_ROOT_USER" -p"$DB_ROOT_PASS" \
+        -e "CREATE DATABASE IF NOT EXISTS \`${TRIPWIRE_DB}\`;"
 
-# Simple dateDiff functioin
-
-datediff() {
-    d1=$(date -d "$1" +%s)
-    d2=$(date -d "$2" +%s)
-    echo $(( (d1 - d2) / 86400 ))
-}
-
-# Downloads fuzzworks SDE and cat it to the init.sql
-
-download_import_sde () {
-	cd /tmp
-	wget --no-verbose https://www.fuzzwork.co.uk/dump/mysql-latest.tar.bz2
-	tar jxf mysql-latest.tar.bz2 -C /tmp/"$SDE_DATABASE" --strip-components 1
-	{
-		echo "CREATE DATABASE IF NOT EXISTS $SDE_DATABASE;"
-		echo "USE $SDE_DATABASE;"
-		cat /tmp/"$SDE_DATABASE"/*.sql
-	} >> $init_file
-	echo "Download and import succeeded"
-} || {
-	echo "SDE Download and Import failed"
-}
-
-# Stores the amount of time in days between now (UTC) and fuzzworks SDE
-
-date_diff_evedump=$(datediff "$current_date" "$remote_evedump_DO")
-
-if [ ! -d /var/lib/mysql/eve_dump ]; then
-	echo "Eve SDE doesn't exist...Redownloading"
-	download_import_sde
-elif [ "$date_diff_evedump" -gt 90 ]; then
-	echo "Eve SDE is older than 90 days...Redownloading"
-	download_import_sde
-elif [ -d /var/lib/mysql/eve_dump ]; then
-	echo "Eve SDE exists and is not 90 days old..Skipping"
+  # Load the .sql
+  mysql -h"$DB_HOST" -P"$DB_PORT" -u"$DB_ROOT_USER" -p"$DB_ROOT_PASS" \
+        "$TRIPWIRE_DB" < ./tripwire.sql
+  echo "[SEED] Tripwire schema imported into $TRIPWIRE_DB!"
+else
+  echo "[SEED] tripwire.sql not found? Skipping."
 fi
 
-if test -f mysql-latest.tar.bz2; then
-	rm mysql-latest.tar.bz2
+###############################################################################
+# 3) Optionally fetch fuzzworks SDE & import it
+###############################################################################
+echo "[SEED] Checking Fuzzworks SDE logic..."
+
+if [ -z "${SDE_DB:-}" ]; then
+  echo "[SEED] SDE_DB is empty? Skipping SDE import."
+  exit 0
 fi
+
+
+echo "[SEED] Creating $SDE_DB if not exists..."
+mysql -h"$DB_HOST" -P"$DB_PORT" -u"$DB_ROOT_USER" -p"$DB_ROOT_PASS" \
+      -e "CREATE DATABASE IF NOT EXISTS \`${SDE_DB}\`;"
+
+echo "[SEED] Downloading fuzzworks SDE..."
+mkdir -p /tmp/eve_dump
+cd /tmp
+wget --no-verbose https://www.fuzzwork.co.uk/dump/mysql-latest.tar.bz2
+tar jxf mysql-latest.tar.bz2 -C /tmp/eve_dump --strip-components 1
+echo "[SEED] Importing SDE .sql into $SDE_DB ..."
+mysql -h"$DB_HOST" -P"$DB_PORT" -u"$DB_ROOT_USER" -p"$DB_ROOT_PASS" \
+      "$SDE_DB" < /tmp/eve_dump/*.sql
+echo "[SEED] SDE import complete!"
+
+echo "[SEED] All done!"
+exit 0
