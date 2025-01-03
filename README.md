@@ -1,19 +1,16 @@
 # README
 
-Some things have changed, read carefully - also Docker has some isssues yet, recommend not using it or helping solve the issues.
-
+Some things have changed, read carefully
 The landing page twitter feed won't work since the one I used requires a private token, I will have to find a new way to do it later.
 
 
 ### Tripwire - EVE Online wormhole mapping web tool
-
 - MIT license
 - [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
 
 ### Setup guide for Linux
 
 Requirements:
-
 - PHP7+ (older requires polyfill for public/login.php as documented in that file)
 - php-mbstring must be installed
 - MySQL (or some flavor of MySQL - needed because database EVENTS)
@@ -22,7 +19,6 @@ Requirements:
 - CRON or some other scheduler to execute PHP scripts
 
 Setup:
-
 - Create a `tripwire` database using the export located in `.docker/mysql/tripwire.sql`
 - For development: create an EVE dump database, define it's name later in `config.php`. Download from: https://www.fuzzwork.co.uk/dump/ To download the latest use the following link: https://www.fuzzwork.co.uk/dump/mysql-latest.tar.bz2. You do not need a copy of the SDE to run Tripwire (since 1.21).
 - Clone the Tripwire repo to where you are going to serve to the public OR manually download repo and copy files yourself
@@ -46,6 +42,7 @@ Setup:
 - If you are using SELinux: Tripwire needs access to the 'cache' directory inside the deployment directory, usually /var/www/tripwire. You need to make this a write-access directory via SELinux labelling: `semanage fcontext -a -t httpd_sys_rw_content_t "/var/www/tripwire/cache(/.*)?"` - then relabel the directory `restorecon -R -v /var/www/tripwire`
 
 
+
 ### Setup guide for Docker
 - Install Docker for your environment: https://www.docker.com/
 - Setup Developer application on Eve developers
@@ -67,15 +64,14 @@ Setup:
     - esi-search.search_structures.v1
 ```
 
-**QUICK SETUP**  
-A setup script is provided `./setup.sh`
 
+**QUICK SETUP**
+A setup script is provided `./setup.sh`
 This script will request all needed information and modify settings, then offer the option to start the build
 Once complete, your tripwire instance wiull be up and running.
 
 
 **Manual Setup**
-
 - Copy db.inc.docker.example.php to db.inc.php
 - Copy config.example.php to config.php
 - Modify the constants with your own settings in both files
@@ -133,15 +129,12 @@ To start the stack run `docker compose up -d --build`
 To view logs in real time run `docker compose logs -f`
 
 
-
 ### Contribution guidelines
-
 - Base off of production or development
 - Create PRs into development
 - Look over issues, branches or get with me to ensure it isn't already being worked on
 
 ### Who do I talk to?
-
 - Astriania / Kariyo Astrien (Main contributor/maintainer)
 - Tripwire Public in-game channel
 - Discord: https://discord.gg/xjFkJAx
