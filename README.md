@@ -66,8 +66,8 @@ Setup:
     - esi-characters.read_titles.v1
     - esi-search.search_structures.v1
 ```
-  
-
+  \
+  \
 
 **QUICK SETUP**  
 A setup script is provided `./setup.sh`
@@ -75,7 +75,7 @@ This script will request all needed information and modify settings, then offer 
 Once complete, your tripwire instance wiull be up and running.
   
 
-  
+
 **Manual Setup**
 - Copy db.inc.docker.example.php to db.inc.php
 - Copy config.example.php to config.php
