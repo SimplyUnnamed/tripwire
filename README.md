@@ -45,18 +45,14 @@ Setup:
 - Setup a CRON or schedule for `account_update.cron.php` to run every 3 minutes or however often you want to check for corporation changes. CRON: `*/3 * * * * php /dir/to/account_update.cron.php`
 - If you are using SELinux: Tripwire needs access to the 'cache' directory inside the deployment directory, usually /var/www/tripwire. You need to make this a write-access directory via SELinux labelling: `semanage fcontext -a -t httpd_sys_rw_content_t "/var/www/tripwire/cache(/.*)?"` - then relabel the directory `restorecon -R -v /var/www/tripwire`
 
+
 ### Setup guide for Docker
 - Install Docker for your environment: https://www.docker.com/
 - Setup Developer application on Eve developers
 - Configure your domain registrar with a record pointed to the vm you are using -- ensure port 80/443 are open (80 can be closed after traefik setup)
 - Clone repo and change directory into it
-- Copy db.inc.docker.example.php to db.inc.php
-- Copy config.example.php to config.php
-- Modify the constants with your own settings in both files
-- Prep traefik acme file
 
-
-**SSO**
+**EVE SSO**
 ```
   - Create an EVE developer application via https://developers.eveonline.com/applications
   - EVE SSO `Callback URL` should be: `https://your-domain.com/index.php?mode=sso`
@@ -71,8 +67,23 @@ Setup:
     - esi-search.search_structures.v1
 ```
 
+
+**QUICK SETUP**
+A setup script is provided `./setup.sh`
+This script will request all needed information and modify settings, then offer the option to start the build
+Once complete, your tripwire instance wiull be up and running
+
+
+
+**Manual Setup**
+- Copy db.inc.docker.example.php to db.inc.php
+- Copy config.example.php to config.php
+- Modify the constants with your own settings in both files
+- Prep traefik acme file
+
+Required changes for setup:
+
 **docker-compose.yml**
-edit the following items with your information
 ```
 under Traefik:
   - "--certificatesresolvers.myresolver.acme.email=your@email.com"
@@ -116,14 +127,9 @@ chmod 600 traefik-data/acme.json
 crontab -l | cat - crontab-tw.txt >/tmp/crontab.txt && crontab /tmp/crontab.txt
 ```
 
-
-**General**
-
-A quick and dirty setup script is provided `./setup.sh`
-
-To view logs in real time run `docker compose logs -f`
-
+**DOCKER BUILD**
 To start the stack run `docker compose up -d --build`
+To view logs in real time run `docker compose logs -f`
 
 
 
