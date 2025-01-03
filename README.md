@@ -69,6 +69,7 @@ Setup:
 
 
 **QUICK SETUP**
+
 A setup script is provided `./setup.sh`
 This script will request all needed information and modify settings, then offer the option to start the build
 Once complete, your tripwire instance wiull be up and running
@@ -76,30 +77,32 @@ Once complete, your tripwire instance wiull be up and running
 
 
 **Manual Setup**
+
 - Copy db.inc.docker.example.php to db.inc.php
 - Copy config.example.php to config.php
 - Modify the constants with your own settings in both files
 - Prep traefik acme file
 
+
 Required changes for setup:
 
 **docker-compose.yml**
-```
+~~~~
 under Traefik:
   - "--certificatesresolvers.myresolver.acme.email=your@email.com"
 
-under nginx
+under nginx:
   - "traefik.http.routers.nginx.rule=Host(`your domain`)"
   - "traefik.http.routers.nginxweb_http.rule=Host(`your domain`)"
 
-under mysql
+under mysql:
   - MYSQL_ROOT_PASSWORD="any root password you want, don't use quotes"
   - MYSQL_USER="any non root user you want, also no quotes"
   - MYSQL_PASSWORD="any non root password you want, still no quotes"
 
-under db-seed
+under db-seed:
   - DB_ROOT_PASS=the same ROOT password as under sql
-```
+~~~~
 
 **db.inc.php**
 ```
