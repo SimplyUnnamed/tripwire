@@ -1,16 +1,15 @@
-# README
-
+# README  
 Some things have changed, read carefully
 The landing page twitter feed won't work since the one I used requires a private token, I will have to find a new way to do it later.
 
 
-### Tripwire - EVE Online wormhole mapping web tool
+### Tripwire - EVE Online wormhole mapping web tool  
 - MIT license
 - [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
 
-### Setup guide for Linux
+### Setup guide for Linux  
 
-Requirements:
+Requirements:  
 - PHP7+ (older requires polyfill for public/login.php as documented in that file)
 - php-mbstring must be installed
 - MySQL (or some flavor of MySQL - needed because database EVENTS)
@@ -18,7 +17,7 @@ Requirements:
 - The `sql_mode` and `event_scheduler` my.cnf lines are important, make sure you have them in your my.cnf file & reboot MySQL
 - CRON or some other scheduler to execute PHP scripts
 
-Setup:
+Setup:  
 - Create a `tripwire` database using the export located in `.docker/mysql/tripwire.sql`
 - For development: create an EVE dump database, define it's name later in `config.php`. Download from: https://www.fuzzwork.co.uk/dump/ To download the latest use the following link: https://www.fuzzwork.co.uk/dump/mysql-latest.tar.bz2. You do not need a copy of the SDE to run Tripwire (since 1.21).
 - Clone the Tripwire repo to where you are going to serve to the public OR manually download repo and copy files yourself
@@ -43,7 +42,7 @@ Setup:
 
 
 
-### Setup guide for Docker
+### Setup guide for Docker  
 - Install Docker for your environment: https://www.docker.com/
 - Setup Developer application on Eve developers
 - Configure your domain registrar with a record pointed to the vm you are using -- ensure port 80/443 are open (80 can be closed after traefik setup)
@@ -63,15 +62,19 @@ Setup:
     - esi-characters.read_titles.v1
     - esi-search.search_structures.v1
 ```
-
-
-**QUICK SETUP**
-A setup script is provided `./setup.sh`
-This script will request all needed information and modify settings, then offer the option to start the build
+  
+  
+  
+  
+**QUICK SETUP**  
+A setup script is provided `./setup.sh`  
+This script will request all needed information and modify settings, then offer the option to start the build  
 Once complete, your tripwire instance wiull be up and running.
-
-
-**Manual Setup**
+  
+  
+  
+  
+**Manual Setup**  
 - Copy db.inc.docker.example.php to db.inc.php
 - Copy config.example.php to config.php
 - Modify the constants with your own settings in both files
