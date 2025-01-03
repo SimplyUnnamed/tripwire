@@ -1,10 +1,12 @@
 #!/bin/bash
 
+
 ########################################################################
 #                                                                      #
 #                   Tripwire Docker Installer Script                   #
 #                                                                      #
 ########################################################################
+
 
 #get variables
 echo "Please enter the Traefik email"
