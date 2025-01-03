@@ -87,7 +87,7 @@ Once complete, your tripwire instance wiull be up and running
 Required changes for setup:
 
 **docker-compose.yml**
-~~~~
+```
 under Traefik:
   - "--certificatesresolvers.myresolver.acme.email=your@email.com"
 
@@ -102,7 +102,7 @@ under mysql:
 
 under db-seed:
   - DB_ROOT_PASS=the same ROOT password as under sql
-~~~~
+```
 
 **db.inc.php**
 ```
