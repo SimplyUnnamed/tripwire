@@ -75,6 +75,7 @@ Once complete, your tripwire instance wiull be up and running.
 
 
 **Manual Setup**
+
 - Copy db.inc.docker.example.php to db.inc.php
 - Copy config.example.php to config.php
 - Modify the constants with your own settings in both files
