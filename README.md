@@ -66,14 +66,12 @@ Setup:
     - esi-characters.read_titles.v1
     - esi-search.search_structures.v1
 ```
-  \
-  \
 
 **QUICK SETUP**  
 A setup script is provided `./setup.sh`
+
 This script will request all needed information and modify settings, then offer the option to start the build
 Once complete, your tripwire instance wiull be up and running.
-  
 
 
 **Manual Setup**
