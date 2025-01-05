@@ -68,7 +68,7 @@ Setup:
  
 **QUICK SETUP**  
 
-A setup script is provided `./setup.sh`  
+A setup script is provided `./scripts/setup.sh`  
 This script will request all needed information and modify settings, then offer the option to start the build  
 Once complete, your tripwire instance wiull be up and running.
 
