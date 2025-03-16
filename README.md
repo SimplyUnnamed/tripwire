@@ -70,7 +70,7 @@ Setup:
 
 A setup script is provided `./scripts/setup.sh`  
 This script will request all needed information and modify settings, then offer the option to start the build  
-Once complete, your tripwire instance wiull be up and running.
+Once complete, your tripwire instance will be up and running.
 
 **Manual Setup**
 
