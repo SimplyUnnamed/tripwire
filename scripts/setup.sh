@@ -80,7 +80,7 @@ function dosetup {
 }
 
 function dobuild {
-  docker compose up -d --build
+  docker compose --env-file .env up -d --build
   exit
 }
 getvars
