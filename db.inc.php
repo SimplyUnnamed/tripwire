@@ -9,7 +9,9 @@ try {
             PDO::ATTR_PERSISTENT     => true
         )
     );
-    
+   
 } catch (PDOException $error) {
+    echo $error->getMessage();
+    exit;
     error_log($error->getMessage());
 }

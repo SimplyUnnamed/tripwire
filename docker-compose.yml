@@ -50,22 +50,44 @@ services:
   #     - .env
 
   mysql:
-    # image: percona
-    build:
-      context: .
-      dockerfile: .docker/mysql/Dockerfile
+    image: mysql:8.0.40
+    container_name: mysql
     networks:
       - tripwire
+    environment:
+      - MYSQL_ROOT_PASSWORD=root_password # do not use quotes
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_USER=${DB_USERNAME} # do not use quotes
+      - MYSQL_PASSWORD=${DB_PASSWORD} # do not use quotes
     volumes:
       - mysql-data:/var/lib/mysql
-      - ./.docker/mysql/tripwire.sql:/tmp/tripwire.sql
     ports:
       - "3306:3306"
-    environment:
-      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
-      - TRIPWIRE_DATABASE=${DB_NAME}
-      - SDE_DATABASE=eve_dump
-    entrypoint: sh -c "/tmp/init.sh && echo 'starting mysql...' && /docker-entrypoint.sh --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci"
+
+  adminer:
+    container_name: adminer
+    image: adminer
+    networks:
+      - tripwire
+    ports:
+      - 9000:8080
+  # mysql:
+  #   # image: percona
+  #   build:
+  #     context: .
+  #     dockerfile: .docker/mysql/Dockerfile
+  #   networks:
+  #     - tripwire
+  #   volumes:
+  #     - mysql-data:/var/lib/mysql
+  #     - ./.docker/mysql/tripwire.sql:/tmp/tripwire.sql
+  #   ports:
+  #     - "3306:3306"
+  #   environment:
+  #     - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+  #     - TRIPWIRE_DATABASE=${DB_NAME}
+  #     - SDE_DATABASE=eve_dump
+  #   entrypoint: sh -c "/tmp/init.sh && echo 'starting mysql...' && /docker-entrypoint.sh --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci"
 
   # Development only - For database administration
   # adminer:
