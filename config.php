@@ -9,7 +9,7 @@ define('APP_NAME', getenv('APP_NAME'));
 define('CDN_DOMAIN', getenv('APP_DOMAIN'));
 
 // EVE SDE table name
-define('EVE_DUMP', 'eve_carnyx');
+define('EVE_DUMP', 'eve_dump');
 
 // Enable Tripwire API?
 define('TRIPWIRE_API', getenv('API_ENABLED'));
