@@ -10,6 +10,7 @@ $startTime = microtime(true);
 
 require_once('config.php');
 require_once('settings.php');
+require_once('masks.inc.php');
 require('lib.inc.php');
 
 $system = $_REQUEST['system'];
@@ -29,7 +30,7 @@ $system = $_REQUEST['system'];
 	<link rel="stylesheet" type="text/css" href="//<?= CDN_DOMAIN ?>/css/jquery.jbox-notice.css">
 	<link rel="stylesheet" type="text/css" href="//<?= CDN_DOMAIN ?>/css/gridster.min.css">
 	<link rel="stylesheet" type="text/css" href="//<?= CDN_DOMAIN ?>/css/jquery-ui-1.12.1.min.css">
-	<link rel="stylesheet" type="text/css" href="//<?= CDN_DOMAIN ?>/css/jquery-ui-custom.css">
+	<link rel="stylesheet" type="text/css" href="//<?= CDN_DOMAIN ?>/css/jquery-ui-custom.css?v=<?= VERSION ?>">
 	<link rel="stylesheet" type="text/css" href="//<?= CDN_DOMAIN ?>/css/introjs.min.css">
 	<link rel="stylesheet" type="text/css" href="//<?= CDN_DOMAIN ?>/css/app.min.css?v=<?= VERSION ?>">
 
@@ -59,8 +60,8 @@ $system = $_REQUEST['system'];
 			<span id="login">
 				<h3><a id="user" href=""><span id="user-no-track"><?= $_SESSION['characterName'] ?></span><span id="user-track" style="display:none"><i data-icon="follow" data-tooltip="Tracking"></i><span id="user-track-name">...</span></span></a></h3>
 				<div id="panel">
-					<div id="content">
-						<div id="triangle"></div>
+					<div id="content" class="dialog-like">
+						<div class="triangle"></div>
 
 						<table id="logoutTable">
 							<tr>
@@ -72,10 +73,14 @@ $system = $_REQUEST['system'];
 												<table id="tracking-clone" class="hidden">
 													<tr>
 														<td rowspan="5" class="avatar"><img src="" />
-															<i data-icon="red-giant" class="online critical" data-tooltip="Online status"></i>
-															<i data-icon="alert" class="alert hidden" data-tooltip="Re-add character to fix missing permissions"></i>
+															<hr class="bar online critical" style="margin-bottom: 2px" data-tooltip="Online status" />
+															<span class="control-group">
+																<i data-icon="eye" class="show interactable" data-property="show" data-tooltip="Visible on chain"></i>
+																<i data-icon="prop-mod" class="show-ship interactable" data-property="showShip" data-tooltip="Ship shown on chain"></i>
+															</span>
 														</td>
 														<td class="name text">&nbsp;</td>
+														<i data-icon="alert" class="alert hidden" data-tooltip="Re-add character to fix missing permissions"></i>
 													</tr>
 													<tr>
 														<td class="system text">&nbsp;</td>
@@ -121,9 +126,17 @@ $system = $_REQUEST['system'];
 			</span>
 
 			<h3> | </h3>
+			<h3><a href="#" id="mask-menu-link" data-tooltip="Current mask"><span id="mask">(???)</span></a></h3>
+			<div id="mask-menu" class="toggle-panel" style="right: 68px; top:34px; display:none">
+				<div class="triangle"></div>
+				<div id="mask-menu-mask-list"></div>
+				<hr class="bar" />
+				<a href="#" id="mask-link">Manage masks</a>
+				<a href="#" id="admin"<?= checkAdmin($_SESSION['mask']) || checkOwner($_SESSION['mask']) ? '' : 'style="display: none"' ?>>Mask Admin</a>
+			</div>
+			<h3> | </h3>
 
 			<i id="settings" style="font-size: 1.7em;" data-icon="settings" class="options" data-tooltip="Settings"></i>
-			<i id="admin" style="font-size: 1.7em;" data-icon="user" data-tooltip="Mask Admin" class="<?= checkAdmin($_SESSION['mask']) || checkOwner($_SESSION['mask']) ? '' : 'disabled' ?>"></i>
 			<i id="layout" style="font-size: 1.7em;" data-icon="layout" data-tooltip="Customize layout"></i>
 		</span>
 	</div>
@@ -252,41 +265,22 @@ $system = $_REQUEST['system'];
 					<span>|</span>
 					<i id="show-viewing" data-icon="eye" data-tooltip="Add viewing system to chain"></i>
 					<i id="show-favorite" data-icon="star" data-tooltip="Add favorite systems to chain"></i>
-					<i id="show-chainLegend" data-icon="tree" data-tooltip="<table id='guide'>
+					<i id="show-chainLegend" data-tooltip="<table id='guide'>
 						<tr><td><div class='guide stable'></td><td>Stable</td><th>Auras</th></tr>
 						<tr><td><div class='guide eol'></div></td><td>End of Life</td><td><div class='guide aura jm-5kt frig'></div></td><td>Small</td></tr>
 						<tr><td><div class='guide destab'></div></td><td>Mass Destabbed</td><td><div class='guide aura jm-62kt'></div></td><td>Medium</td></tr>
 						<tr><td><div class='guide critical'></div></td><td>Mass Critical</td><td><div class='guide aura jm-375kt'></div></td><td>Large</td></tr>
 						<tr><td><div class='guide frig'></div></td><td>Frigate</td><td><div class='guide aura jm-2000kt'></div></td><td>X-Large</td></tr>
-					</table>"></i>
+					</table>">&equiv;</i>
+					<span>|</span>
+					<i id="hot-jump" data-icon="prop-mod" data-tooltip="Jumping hot (prop on)"></i>
+					<i id="higgs-jump" data-icon="anchor" data-tooltip="Higgs Anchor fitted"></i>
 					<div style="float: right;">
 						<button id="chain-zoom-reset" class="hidden">Reset Zoom</button>
 						<!-- <i class="tutorial" data-tooltip="Show tutorial for this section">?</i> -->
 					</div>
 				</div>
 				<div id="chainParent" class="content dragscroll">
-					<ul id="chainMenu" class="hidden">
-						<!-- <li data-command="showInfo"><a>Show Info</a> -->
-						<li><a>Navigation</a>
-							<ul style="width: 10em;">
-								<li data-command="setDest"><a>Set Destination</a></li>
-								<li data-command="addWay"><a>Add Waypoint</a></li>
-							</ul>
-						</li>
-						<li>
-							<li><a>Flares</a>
-								<ul style="width: 10em;">
-									<li data-command="red"><a>Battle (red)</a></li>
-									<li data-command="yellow"><a>Hold (yellow)</a></li>
-									<li data-command="green"><a>Fleet Op (green)</a></li>
-								</ul>
-							</li>
-							<li data-command="mass"><a>Mass</a></li>
-							<li data-command="collapse"><a>Collapse</a></li>
-							<li data-command="ping"><a>Ping ...</a></li>
-							<li data-command="makeTab"><a id="makeTabMenuItem">[makeTab]</a></li>
-						</li>
-					</ul>
 					<div style="position: relative; display: table; width: 100%;">
 						<table id="chainGrid">
 							<tr class="top"><td></td></tr>
@@ -339,6 +333,34 @@ $system = $_REQUEST['system'];
 						<div id="chainMap"></div>
 					</div>
 				</div>
+				<div id="menuContainer" style="position:absolute">
+					<ul id="chainMenu" class="hidden">
+						<!-- <li data-command="showInfo"><a>Show Info</a> -->
+						<li><a>Navigation</a>
+							<ul style="width: 10em;">
+								<li data-command="setDest"><a>Set Destination</a></li>
+								<li data-command="addWay"><a>Add Waypoint</a></li>
+								<li>-</li>
+								<li data-command="setDestAll"><a>Set Destination (All Tracked)</a></li>
+								<li data-command="addWayAll"><a>Add Waypoint (All Tracked)</a></li>		
+							</ul>
+						</li>
+						<li>
+							<li><a>Flares</a>
+								<ul style="width: 10em;">
+									<li data-command="red"><a>Battle (red)</a></li>
+									<li data-command="yellow"><a>Hold (yellow)</a></li>
+									<li data-command="green"><a>Fleet Op (green)</a></li>
+								</ul>
+							</li>
+							<li data-command="mass"><a>Mass</a></li>
+							<li data-command="collapse"><a>Collapse</a></li>
+							<li data-command="ping"><a>Ping ...</a></li>
+							<li data-command="copySystemName"><a id="copySystemNameMenuItem">[Copy system name]</a></li>
+							<li data-command="makeTab"><a id="makeTabMenuItem">[makeTab]</a></li>
+						</li>
+					</ul>				
+				</div>
 			</li>
 		</ul>
 	</div>
@@ -362,7 +384,7 @@ $system = $_REQUEST['system'];
 	</div>
 
 	<div id="dialog-deleteSig" title="Delete Signature(s)" class="hidden">
-		<i data-icon="alert"></i> This signature will be removed from this system. Are you sure?
+		<i data-icon="alert"></i> <span id="deleteSigText">This signature</span> will be removed from <span id="deleteSigSystem">this system</span>. Are you sure?
 	</div>
 
 	<div id="dialog-signature" title="Add Signature" class="hidden">
@@ -590,6 +612,30 @@ $system = $_REQUEST['system'];
 			</div>
 		</div>
 	</div>
+	
+	<div id="dialog-masks" title="Masks" class="hidden">
+		<div id="masks">
+			<div class="maskCategory">
+				<div class="maskCategoryLabel">Default</div>
+				<div id="default"></div>
+			</div>
+			<div class="maskCategory">
+				<div class="maskCategoryLabel">I Own</div>
+				<div id="owned"></div>
+			</div>
+			<div class="maskCategory">
+				<div class="maskCategoryLabel">I'm Invited</div>
+				<div id="invited"></div>
+			</div>
+		</div>
+		<div id="maskControls">
+				<input type="button" id="edit" value="Edit" />
+				<input type="button" id="delete" value="Delete" />
+		</div>		
+		<div id="mask-explanation"><p>The mask source icons <span class="mask"><i data-icon="eye" class="global" data-tooltip="Global mask, visible to everyone"></i>, <i data-icon="user" class="character" data-tooltip="Personal mask, managed by the owner"></i>, <i data-icon="star" class="corporate" data-tooltip="Corporate mask, managed by corp admins"></i>, <i data-icon="star" class="alliance"data-tooltip="Alliance mask"></i></span> show where the mask comes from.</p>
+		<p>The colour of the bar on the mask preview shows how you are invited to it: grey, green or blue for being invited personally, through your corp or through your alliance. Only corp admins can add/remove corp-joined masks from the quick switch.</p>
+		</div>
+	</div>
 
 	<div id="dialog-options" title="Settings" class="hidden">
 		<div id="optionsAccordion">
@@ -606,32 +652,7 @@ $system = $_REQUEST['system'];
 					<tr>
 						<th colspan="2" id="characters"></th>
 					</tr>
-					<tr class="line">
-						<th colspan="2">Masks:</th>
-					</tr>
-					<tr>
-						<td colspan="2" id="masks">
-							<div class="maskCategory">
-								<div class="maskCategoryLabel">Default</div>
-								<div id="default"></div>
-							</div>
-							<div class="maskCategory">
-								<div class="maskCategoryLabel">Personal</div>
-								<div id="personal"></div>
-							</div>
-							<div class="maskCategory">
-								<div class="maskCategoryLabel">Corporate</div>
-								<div id="corporate"></div>
-							</div>
-						</td>
-					</tr>
-					<tr id="maskControls">
-						<td colspan="2" style="padding: 5px 0;">
-							<input type="button" id="create" value="Create" />
-							<input type="button" id="edit" value="Edit" />
-							<input type="button" id="delete" value="Delete" />
-						</td>
-					</tr>
+
 				</table>
 				<div style="border-top: 1px solid black; text-align: right; margin: 0 -5px; padding: 5px 5px 0 5px;">
 					<input type="button" id="usernameChange" value="Change Username" />
@@ -645,8 +666,10 @@ $system = $_REQUEST['system'];
 						<th>Chain Renderer:</th>
 						<td>
 							<select id="renderer">
-								<option value="orgChart">Org Chart</option>
+								<option value="orgChartTop">New Org Chart (System at top)</option>
+								<option value="orgChartSide">New Org Chart (System at left)</option>
 								<option value="radial">Radial (System in middle)</option>
+								<option value="orgChart">Old legacy org chart</option>
 							</select>
 						</td>
 					</tr>
@@ -662,6 +685,12 @@ $system = $_REQUEST['system'];
 						<td>
 							<input type="radio" name="aura" id="aura-yes" value="true" /><label for="aura-yes"> Yes</label>
 							<input type="radio" name="aura" id="aura-no" value="false" /><label for="aura-no"> No</label>
+						</td>
+					</tr>
+					<tr>
+						<th>Line Weight Factor*:</th>
+						<td>
+							<label for="node-spacing-line-weight-slider"></label><div id="node-spacing-line-weight-slider" class="spacing-slider"></div>
 						</td>
 					</tr>
 					<tr>
@@ -981,10 +1010,12 @@ $system = $_REQUEST['system'];
 				</tr>
 				<tr>
 					<td colspan="2">
-						<input type="radio" value="character" name="category" id="characterSearch" />
+						<input type="checkbox" value="character" name="category" id="characterSearch" checked="checked"/>
 						<label for="characterSearch">Character</label>
-						<input type="radio" value="corporation" name="category" id="corporationSearch" checked="checked" />
+						<input type="checkbox" value="corporation" name="category" id="corporationSearch" checked="checked" />
 						<label for="corporationSearch">Corporation</label>
+						<input type="checkbox" value="alliance" name="category" id="allianceSearch" checked="checked" />
+						<label for="allianceSearch">Alliance</label>
 						<br/>
 						<input type="checkbox" value="exact" name="exact" id="exactSearch" />
 						<label for="exactSearch">Exact Match</label>
@@ -1033,18 +1064,26 @@ $system = $_REQUEST['system'];
 	</div>
 
 	<div id="dialog-mass" title="" class="hidden">
-		<table id="massTable">
+		<p><span id="mass-systems">-</span><span id="mass-placeholder-desc" data-tooltip="Based on system types.<br>Enter the actual hole type in the Edit Signature panel for accurate mass values."> (Inferred hole type)</span></p>
+		<p>Total recorded: <b id="mass-jumped">?</b> of ~<span id="mass-capacity">?</span> [<span data-tooltip="Wormhole mass can be ±10%, and there might be unrecorded jumps.">?</span>]</p>
+		<p>Show jumps down to: 
+			<label><input type="radio" name="show-mass" value="capital"> Capital only</label>
+			<label><input type="radio" name="show-mass" value="battleship"> Battleships</label>
+			<label><input type="radio" name="show-mass" value="cruiser"> Cruisers</label>
+			<label><input type="radio" name="show-mass" value="all" checked> All jumps</label>
+		</p>
+		<div id="massTableContainer"><table id="massTable">
 			<thead>
 				<tr>
 					<th>Character</th>
 					<th>Direction</th>
 					<th>Ship Type</th>
-					<th>Mass</th>
+					<th>Mass [<span data-tooltip="Hot jumps <i data-icon=prop-mod></i> add prop mod (50kt except for caps) to mass<br>Higgs <i data-icon=anchor></i> doubles jump mass">?</span>]</th>
 					<th>Time</th>
 				</tr>
 			</thead>
 			<tbody></tbody>
-		</table>
+		</table></div>
 	</div>
 
 	<div id="dialog-ping" title="" class="hidden" style="width:300px">
@@ -1172,7 +1211,8 @@ $system = $_REQUEST['system'];
 
 	<script type="text/javascript">
 
-		var init = <?= json_encode($_SESSION) ?>;
+		const init = <?= json_encode($_SESSION) ?>;
+		init.masks = <?= json_encode(getMasks($_SESSION['characterID'], $_SESSION['corporationID'], $_SESSION['admin'], $_SESSION['mask'])) ?>;
 
 		var passiveHitTimer;
 		function passiveHit() {

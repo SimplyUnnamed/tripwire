@@ -1,30 +1,20 @@
-FROM centos:7
+FROM debian:bullseye
 
-RUN yum update -y && \
-    yum install -y epel-release
+WORKDIR /seed
 
-RUN yum install -y https://repo.percona.com/yum/percona-release-latest.noarch.rpm && \
-    yum install -y Percona-Server-server-57 wget bzip2 && \
-    yum -y update
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        wget \
+        bzip2 \
+        curl \
+        mariadb-client \
+        ca-certificates \
+        tar && \
+    rm -rf /var/lib/apt/lists/*
 
-COPY ./.docker/mysql/my.cnf /etc/my.cnf
-# COPY ./.docker/mysql/setup.sql /root/setup.sql
+COPY seed.sh .
+COPY tripwire.sql ./tripwire.sql
 
-RUN yum clean all
-COPY --chown=mysql:mysql ./.docker/mysql/docker-entrypoint.sh /docker-entrypoint.sh
-COPY --chown=mysql:mysql ./.docker/mysql/init.sh /tmp/init.sh
+RUN chmod +x seed.sh
 
-RUN mkdir -p /docker-entrypoint-initdb.d/ && \
-    touch /docker-entrypoint-initdb.d/init.sql && \
-    chmod 777 /docker-entrypoint-initdb.d && \
-    chmod 777 /docker-entrypoint-initdb.d/init.sql && \
-    chmod +x /docker-entrypoint.sh && \
-    chmod +x /tmp/init.sh
-
-# CMD mysqld --user=root --initialize-insecure && \
-#    mysqld --user=root && tail -F /var/log/mysql/error.log
-
-# CMD mysqld --user=root && tail -F /var/log/mysql/error.log
-
-#ONBUILD mysql -u root < /root/setup.sql
-USER mysql
+ENTRYPOINT ["/seed/seed.sh"]
