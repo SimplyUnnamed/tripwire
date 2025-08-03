@@ -1,15 +1,11 @@
 # README  
-Some things have changed, read carefully
-The landing page twitter feed won't work since the one I used requires a private token, I will have to find a new way to do it later.
-
 
 ### Tripwire - EVE Online wormhole mapping web tool  
 - MIT license
-- [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
 
 ### Setup guide for Linux  
 
-Requirements:  
+**Requirements:**  
 
 - PHP7+ (older requires polyfill for public/login.php as documented in that file)
 - php-mbstring must be installed
@@ -18,7 +14,7 @@ Requirements:
 - The `sql_mode` and `event_scheduler` my.cnf lines are important, make sure you have them in your my.cnf file & reboot MySQL
 - CRON or some other scheduler to execute PHP scripts
 
-Setup:  
+**Setup: (Bare Metal, for docker see below)** 
 
 - Create a `tripwire` database using the export located in `.docker/mysql/tripwire.sql`
 - For development: create an EVE dump database, define it's name later in `config.php`. Download from: https://www.fuzzwork.co.uk/dump/ To download the latest use the following link: https://www.fuzzwork.co.uk/dump/mysql-latest.tar.bz2. You do not need a copy of the SDE to run Tripwire (since 1.21).
@@ -66,16 +62,18 @@ Setup:
     - esi-search.search_structures.v1
 ```
  
-**QUICK SETUP**  
+### QUICK SETUP
 
-A setup script is provided `./scripts/setup.sh`  
+A setup script is provided `./scripts/setup.sh`
 This script will request all needed information and modify settings, then offer the option to start the build  
 Once complete, your tripwire instance will be up and running.
 
-**Manual Setup**
+### Manual Docker Setup
 
 - Copy db.inc.docker.example.php to db.inc.php
+`cp db.inc.docker.example.php db.inc.php`
 - Copy config.example.php to config.php
+`cp config.example.php config.php`
 - Modify the constants with your own settings in both files
 - Prep traefik acme file
 
@@ -83,21 +81,18 @@ Once complete, your tripwire instance will be up and running.
 Required changes for setup:
 
 **docker-compose.yml**
+Create a .env file 
+`touch .env`
+
+Add the following variables to the .env using your text editor of choice: (and define them ovbiously)
 ```
-under Traefik:
-  - "--certificatesresolvers.myresolver.acme.email=your@email.com"
-
-under nginx:
-  - "traefik.http.routers.nginx.rule=Host(`your domain`)"
-  - "traefik.http.routers.nginxweb_http.rule=Host(`your domain`)"
-
-under mysql:
-  - MYSQL_ROOT_PASSWORD="any root password you want, don't use quotes"
-  - MYSQL_USER="any non root user you want, also no quotes"
-  - MYSQL_PASSWORD="any non root password you want, still no quotes"
-
-under db-seed:
-  - DB_ROOT_PASS=the same ROOT password as under sql
+ADM_EMAIL=
+TRDOMAIN=
+MYSQL_ROOT_PASSWORD=
+MYSQL_USER=
+MYSQL_PASSWORD=
+SSO_CLIENT=
+SSO_SECRET=
 ```
 
 **db.inc.php**
@@ -130,6 +125,9 @@ crontab -l | cat - crontab-tw.txt >/tmp/crontab.txt && crontab /tmp/crontab.txt
 
 To start the stack run `docker compose up -d --build`
 To view logs in real time run `docker compose logs -f`
+
+If you see that the .env file is not being loaded, run the stack with 
+`docker-compose --env-file .env up -d --build`
 
 
 ### Contribution guidelines
