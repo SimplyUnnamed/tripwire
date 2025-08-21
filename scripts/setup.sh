@@ -15,7 +15,7 @@ function getvars {
     echo ""
     read -p "Please enter the domain name for tripwire: " TRDOMAIN
     echo ""
-    read -p "Please enter the mysql ROOT password to be set: " MYSQL_ROOT_PASSWO
+    read -p "Please enter the mysql ROOT password to be set: " MYSQL_ROOT_PASSWORD
     read -p "Please enter the mysql USER name to be created: " MYSQL_USER
     read -p "Please enter the mysql USER password to be set: " MYSQL_PASSWORD
     echo ""
@@ -25,7 +25,7 @@ function getvars {
     echo -e "\n\nHere is what you have entered:"
     echo "Traefik email   : $ADM_EMAIL"
     echo "Tripwire domain : $TRDOMAIN"
-    echo "mysql root pass : $MYSQL_ROOT_PASSWO"
+    echo "mysql root pass : $MYSQL_ROOT_PASSWORD"
     echo "mysql user name : $MYSQL_USER"
     echo "mysql user pass : $MYSQL_PASSWORD"
     echo "EVE SSO clientID: $SSO_CLIENT"
