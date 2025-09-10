@@ -62869,6 +62869,7 @@ var appData = {
             "regionID": 11000016,
             "class": 4,
             "statics": [
+                "K346",
                 "C247",
                 "X877"
             ]
@@ -66851,15 +66852,15 @@ var appData = {
             "life": "16 Hours",
             "from": "Class-4",
             "leadsTo": "Null-Sec",
-            "mass": 5000000000,
-            "jump": 2000000000
+            "mass": 3000000000,
+            "jump": 375000000
         },
         "N290": {
             "life": "24 Hours",
             "from": "Class-4",
             "leadsTo": "Low-Sec",
-            "mass": 3300000000,
-            "jump": 2000000000
+            "mass": 3000000000,
+            "jump": 375000000
         },
         "S047": {
             "life": "24 Hours",
@@ -67602,6 +67603,20 @@ var appData = {
                 "Class-4"
             ],
             "leadsTo": "Turnur",
+            "mass": 1000000000,
+            "jump": 62000000
+        },
+        "J492": {
+            "life": "24 Hours",
+            "from": [
+                "Class-1",
+                "Class-2",
+                "Class-3",
+                "Class-4",
+                "Class-5",
+                "Class-6"
+            ],
+            "leadsTo": "Low-Sec",
             "mass": 1000000000,
             "jump": 62000000
         }
