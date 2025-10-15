@@ -63194,8 +63194,7 @@ var appData = {
             "effect": "Wolf-Rayet Star",
             "statics": [
                 "Q003",
-                "Z006",
-                "C008"
+                "Z006"
             ]
         },
         "31002582": {
