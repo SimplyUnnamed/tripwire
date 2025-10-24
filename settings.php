@@ -1,3 +1,3 @@
 <?php
 // Version
-define('VERSION', '1.29b');
+define('VERSION', '1.29c');
