@@ -4,3 +4,5 @@ tweetie/config.php
 vendor
 .env
 *.log
+backup.sql
+traefik-data/acme.json

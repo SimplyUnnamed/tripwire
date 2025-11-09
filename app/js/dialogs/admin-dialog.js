@@ -12,7 +12,7 @@ $("#admin").click(function(e) {
 
 		function refreshWindow() {
 			if ($ajax) $ajax.abort();
-			$total.html("Total: " + $("#dialog-admin .window .hasFocus table tr[data-id]").length);
+			$total.text("Total: " + $("#dialog-admin .window .hasFocus table tr[data-id]").length);
 
 			$ajax = $.ajax({
 				url: "admin.php",
@@ -26,7 +26,7 @@ $("#admin").click(function(e) {
 
 					for (var i = 0, l = rows.length; i < l; i++) {
 						var $row = $("#dialog-admin .window .hasFocus tbody tr[data-id='"+ rows[i].id +"']");
-						ids.push(rows[i].id);
+						ids.push(rows[i].id.toString()); // we do a string compare lower down
 
 						if ($row.length) {
 							for (col in rows[i]) {
@@ -59,7 +59,7 @@ $("#admin").click(function(e) {
 					$("#dialog-admin .window .hasFocus table tr[data-id]").remove();
 				}
 
-				$total.html("Total: " + $("#dialog-admin .window .hasFocus table tr[data-id]").length);
+				$total.text("Total: " + $("#dialog-admin .window .hasFocus table tr[data-id]").length);
 			});
 
 			if ($("#dialog-admin").dialog("isOpen") && $("#dialog-admin .menu .active").attr("data-refresh")) {
@@ -86,7 +86,7 @@ $("#admin").click(function(e) {
 
 					$("#dialog-admin .menu .active").removeClass("active");
 					$menuItem.addClass("active");
-					$("div.ui-dialog[aria-describedby='dialog-admin'] .ui-dialog-traypane").html("");
+					$("div.ui-dialog[aria-describedby='dialog-admin'] .ui-dialog-traypane").text("");
 
 					$("#dialog-admin .window [data-window]").removeClass("hasFocus").hide();
 					$("#dialog-admin .window [data-window='"+ $menuItem.data("window") +"']").addClass("hasFocus").show();
