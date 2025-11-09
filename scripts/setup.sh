@@ -15,7 +15,7 @@ function getvars {
     echo ""
     read -p "Please enter the domain name for tripwire: " TRDOMAIN
     echo ""
-    read -p "Please enter the mysql ROOT password to be set: " MYSQL_ROOT_PASSWO
+    read -p "Please enter the mysql ROOT password to be set: " MYSQL_ROOT_PASSWORD
     read -p "Please enter the mysql USER name to be created: " MYSQL_USER
     read -p "Please enter the mysql USER password to be set: " MYSQL_PASSWORD
     echo ""
@@ -25,7 +25,7 @@ function getvars {
     echo -e "\n\nHere is what you have entered:"
     echo "Traefik email   : $ADM_EMAIL"
     echo "Tripwire domain : $TRDOMAIN"
-    echo "mysql root pass : $MYSQL_ROOT_PASSWO"
+    echo "mysql root pass : $MYSQL_ROOT_PASSWORD"
     echo "mysql user name : $MYSQL_USER"
     echo "mysql user pass : $MYSQL_PASSWORD"
     echo "EVE SSO clientID: $SSO_CLIENT"
@@ -48,8 +48,16 @@ function dosetup {
   cp db.inc.docker.example.php db.inc.php
   cp config.example.php config.php
 
+  #write given variables to .env file
+  echo "ADM_EMAIL=$ADM_EMAIL" >> .env
+  echo "TRDOMAIN=$TRDOMAIN" >> .env
+  echo "MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD" >> .env
+  echo "MYSQL_USER=$MYSQL_USER" >> .env
+  echo "MYSQL_PASSWORD=$MYSQL_PASSWORD" >> .env
+  echo "SSO_CLIENT=$SSO_CLIENT" >> .env
+  echo "SSO_SECRET=$SSO_SECRET" >> .env
+
   #set up config
-  sed -i -e "s/your@email.com/$ADM_EMAIL/g; s/your domain/$TRDOMAIN/g; s/\(apasswordforroot\|samerootpasswordasabove\)/$MYSQL_ROOT_PASSWO/g; s/norootuser/$MYSQL_USER/g; s/anonrootpassword/$MYSQL_PASSWORD/g" ./docker-compose.yml
   sed -i -e "s/usernamefromdockercompose/$MYSQL_USER/g; s/userpasswordfromdockercompose/$MYSQL_PASSWORD/g" ./db.inc.php
   sed -i -e "s/\(your domain\|yourdomain\)/$TRDOMAIN/g; s/adminEmail@example.com/$ADM_EMAIL/g; s/client/$SSO_CLIENT/g; s/secret/$SSO_SECRET/g" ./config.php
 
@@ -72,7 +80,7 @@ function dosetup {
 }
 
 function dobuild {
-  docker compose up -d --build
+  docker compose --env-file .env up -d --build
   exit
 }
 getvars

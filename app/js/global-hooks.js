@@ -436,7 +436,7 @@ $("#chainTabs").on("click", ".closeTab", function(e) {
 	e.stopPropagation();
 	var $tab = $(this).closest(".tab");
 
-	$("#dialog-confirm #msg").html("This tab will be removed, are you sure?");
+	$("#dialog-confirm #msg").text("This tab will be removed, are you sure?");
 	$("#dialog-confirm").dialog("option", {
 		buttons: {
 			"Remove Tab": function() {
@@ -506,7 +506,7 @@ $("#newTab").on("click", function() {
 						systemID = 0;
 					}
 
-					$tab.attr("id", $("#chainTabs .tab").length).find(".name").data("tab", systemID).html(name);
+					$tab.attr("id", $("#chainTabs .tab").length).find(".name").data("tab", systemID).text(name);
 					options.chain.tabs.push({systemID: systemID, name: name, evescout: thera});
 					options.save();
 
@@ -571,7 +571,7 @@ $("#chainTabs").on("click", ".editTab", function(e) {
 						systemID = 0;
 					}
 
-					$tab.attr("id", $("#chainTabs .tab").length).find(".name").data("tab", systemID).html(name);
+					$tab.attr("id", $("#chainTabs .tab").length).find(".name").data("tab", systemID).text(name);
 					options.chain.tabs[options.chain.active] = {systemID: systemID, name: name, evescout: thera};
 					options.save();
 					chain.redraw();
@@ -736,7 +736,7 @@ $("#chainParent").contextmenu({
 					const systemName = tripwire.systems[id].name;
 					options.chain.tabs.push({systemID: '' + id, name: systemName});
 					var newTab = $("#chainTab .tab").clone();
-					newTab.attr('id', options.chain.tabs.length - 1).find(".name").data("tab", id).html(systemName);
+					newTab.attr('id', options.chain.tabs.length - 1).find(".name").data("tab", id).text(systemName);
 					$("#chainTabs").append(newTab);
 					chain.setActiveTab(options.chain.tabs.length - 1);
 				}
